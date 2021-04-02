@@ -13,6 +13,9 @@ interface TimeSeriesPanelProps extends PanelProps<Options> {}
 
 export const TimeSeriesPanel: React.FC<TimeSeriesPanelProps> = ({
   data,
+  panelId,
+  panelTitle,
+  dashboard,
   timeRange,
   timeZone,
   width,
@@ -52,6 +55,9 @@ export const TimeSeriesPanel: React.FC<TimeSeriesPanelProps> = ({
   return (
     <GraphNG
       data={data.series}
+      dashboard={dashboard}
+      panelId={panelId}
+      panelTitle={panelTitle}
       timeRange={timeRange}
       timeZone={timeZone}
       width={width}

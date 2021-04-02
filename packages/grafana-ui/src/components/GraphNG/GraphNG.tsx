@@ -35,6 +35,9 @@ export interface GraphNGProps extends Themeable {
   timeRange: TimeRange;
   legend: VizLegendOptions;
   timeZone: TimeZone;
+  dashboard?: any;
+  panelId?: any;
+  panelTitle?: any;
   fields?: XYFieldMatchers; // default will assume timeseries data
   onLegendClick?: (event: GraphNGLegendEvent) => void;
   onSeriesColorChange?: (label: string, color: string) => void;
@@ -166,6 +169,7 @@ class UnthemedGraphNG extends React.Component<GraphNGProps, GraphNGState> {
     return (
       <PlotLegend
         data={data}
+        dashboard={this.props.dashboard}
         config={config}
         onSeriesColorChange={onSeriesColorChange}
         onLegendClick={onLegendClick}

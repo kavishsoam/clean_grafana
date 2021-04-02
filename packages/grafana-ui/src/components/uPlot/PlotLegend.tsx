@@ -15,10 +15,12 @@ interface PlotLegendProps extends VizLegendOptions, Omit<VizLayoutLegendProps, '
   config: UPlotConfigBuilder;
   onSeriesColorChange?: (label: string, color: string) => void;
   onLegendClick?: (event: GraphNGLegendEvent) => void;
+  dashboard?: any;
 }
 
 export const PlotLegend: React.FC<PlotLegendProps> = ({
   data,
+  dashboard,
   config,
   onSeriesColorChange,
   onLegendClick,
@@ -30,7 +32,7 @@ export const PlotLegend: React.FC<PlotLegendProps> = ({
   const onLegendLabelClick = useCallback(
     (legend: VizLegendItem, event: React.MouseEvent) => {
       const { fieldIndex } = legend;
-
+      console.log(dashboard);
       if (!onLegendClick || !fieldIndex) {
         return;
       }

@@ -82,6 +82,13 @@ export interface PanelProps<T = any> {
   /** EventBus  */
   eventBus: EventBus;
 
+  /** dashboard integation  */
+  dashboard?: any;
+
+  /** panel integation  */
+  panelId?: any;
+  panelTitle?: any;
+
   /** Panel options change handler */
   onOptionsChange: (options: T) => void;
 

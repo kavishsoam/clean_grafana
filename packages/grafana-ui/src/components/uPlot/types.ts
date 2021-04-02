@@ -26,6 +26,9 @@ export interface PlotProps {
   config: UPlotConfigBuilder;
   timeRange: TimeRange;
   children?: React.ReactNode;
+  dashboard?: any;
+  panelId?: any;
+  panelTitle?: any;
 }
 
 export abstract class PlotConfigBuilder<P, T> {

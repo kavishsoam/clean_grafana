@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable eol-last */
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import uPlot, { AlignedData, Options } from 'uplot';
 import { buildPlotContext, PlotContext } from './context';
@@ -6,6 +8,7 @@ import { usePlotConfig } from './hooks';
 import { PlotProps } from './types';
 import { UPlotConfigBuilder } from './config/UPlotConfigBuilder';
 import usePrevious from 'react-use/lib/usePrevious';
+const axios = require('axios');
 
 /**
  * @internal
@@ -78,10 +81,41 @@ export const UPlotChart: React.FC<PlotProps> = (props) => {
     return buildPlotContext(isPlotReady, canvasRef, props.data, registerPlugin, getPlotInstance);
   }, [plotInstance, canvasRef, props.data, registerPlugin, getPlotInstance, isPlotReady]);
 
+  const handleClick = () => {
+    // console.log(props);
+    if (props.dashboard.uid != null) {
+      let userData = {
+        // "id": parseInt(this.dashboard.id),
+        user: props.dashboard.meta.updatedBy,
+        panelid: props.panelId.toString(),
+        panelname: props.panelTitle,
+        dashboardid: props.dashboard.uid.toString(),
+        dashboardname: props.dashboard.title,
+        clickedon: new Date().toISOString(),
+      };
+      console.log(userData);
+      if (userData) {
+        try {
+          axios.post('http://13.235.73.152:5000/api/savedashboardclick', {
+            // eslint-disable-next-line radix
+            // "id": userData.id,
+            user: userData.user,
+            panelid: userData.panelid,
+            panelname: userData.panelname,
+            dashboardid: userData.dashboardid,
+            dashboardname: userData.dashboardname,
+            clickedon: userData.clickedon,
+          });
+        } catch (e) {
+          throw e;
+        }
+      }
+    }
+  };
   return (
     <PlotContext.Provider value={plotCtx}>
       <div style={{ position: 'relative' }}>
-        <div ref={plotCtx.canvasRef} data-testid="uplot-main-div" />
+        <div onClick={handleClick} ref={plotCtx.canvasRef} data-testid="uplot-main-div" />
         {props.children}
       </div>
     </PlotContext.Provider>

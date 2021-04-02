@@ -287,6 +287,9 @@ export class PanelChrome extends Component<Props, State> {
           <PanelComponent
             id={panel.id}
             data={data}
+            dashboard={this.props.dashboard}
+            panelId={this.props.panel.id}
+            panelTitle={this.props.panel.title}
             title={panel.title}
             timeRange={timeRange}
             timeZone={this.props.dashboard.getTimezone()}

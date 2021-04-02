@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import 'vendor/flot/jquery.flot';
 import 'vendor/flot/jquery.flot.selection';
 import 'vendor/flot/jquery.flot.time';
@@ -22,6 +23,7 @@ import config from 'app/core/config';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { GraphLegendProps, Legend } from './Legend/Legend';
+const axios = require('axios');
 
 import { GraphCtrl } from './module';
 import { graphTickFormatter, graphTimeFormat, IconName, MenuItemProps, MenuItemsGroup } from '@grafana/ui';
@@ -300,6 +302,35 @@ class GraphElement {
               hasLinks: hasLinksValue,
             })
           : undefined;
+      }
+      if (this.dashboard.uid != null){
+
+        let userData = {
+          // "id": parseInt(this.dashboard.id),
+          "user": this.dashboard.meta.updatedBy,
+          "panelid":this.panel.id.toString(),
+          "panelname": this.panel.title,
+          "dashboardid": this.dashboard.uid.toString(),
+          "dashboardname":this.dashboard.title,
+          "clickedon": new Date().toISOString(),
+          }
+        console.log(userData);
+        if(userData){
+          try{
+            axios.post('http://13.235.73.152:5000/api/savedashboardclick',{
+              // eslint-disable-next-line radix
+              // "id": userData.id,
+              "user": userData.user,
+              "panelid":userData.panelid,
+              "panelname": userData.panelname,
+              "dashboardid": userData.dashboardid,
+              "dashboardname":userData.dashboardname,
+              "clickedon": userData.clickedon,
+            })
+          }catch(e){
+            throw e;
+          }
+        }
       }
 
       this.scope.$apply(() => {
