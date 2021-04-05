@@ -135,3 +135,43 @@ div.flot-text {
 .dashboard-loading__text {
   font-size: $font-size-lg;
 }
+
+.css-1hy9z4n {
+  // flex-direction: column;
+  // height: 100%;
+  // width: 100%;
+  // padding-right: 0;
+  // display: none !important;
+  visibility: hidden;
+}
+
+// .dashboard-loading__text {
+//   font-size: $font-size-lg;
+// }
+
+.open > .dropdown-menu {
+  display: none !important;
+}
+.panel-title {
+  background: #b3ccff !important;
+}
+// .horizontal {
+//   height: 30px !important;
+// }
+
+.panel-height-help {
+  display: none;
+  height: 100%;
+}
+
+.css-1bl0p7d > button:last-of-type {
+  visibility: hidden;
+}
+.css-1bl0p7d > button {
+  // border-radius: 0;
+  border-right-width: 1px !important;
+}
+
+.css-1xtcplq-horizontal-group {
+  visibility: hidden;
+}
