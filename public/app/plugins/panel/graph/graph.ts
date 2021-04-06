@@ -47,7 +47,7 @@ import {
 } from '@grafana/data';
 import { GraphContextMenuCtrl } from './GraphContextMenuCtrl';
 import { TimeSrv } from 'app/features/dashboard/services/TimeSrv';
-import { ContextSrv } from 'app/core/services/context_srv';
+import { contextSrv, ContextSrv } from 'app/core/services/context_srv';
 import { getFieldLinksSupplier } from 'app/features/panel/panellinks/linkSuppliers';
 import { DashboardModel } from '../../../features/dashboard/state';
 
@@ -303,11 +303,12 @@ class GraphElement {
             })
           : undefined;
       }
-      if (this.dashboard.uid != null){
+      
+      if (this.dashboard.uid != null && contextSrv.user){
 
         let userData = {
           // "id": parseInt(this.dashboard.id),
-          "user": this.dashboard.meta.updatedBy,
+          "user": contextSrv.user.name,
           "panelid":this.panel.id.toString(),
           "panelname": this.panel.title,
           "dashboardid": this.dashboard.uid.toString(),
@@ -575,9 +576,9 @@ class GraphElement {
         delete this.ctrl.error;
       }
     } catch (e) {
-      console.error('flotcharts error', e);
-      this.ctrl.error = e.message || 'Render Error';
-      this.ctrl.renderError = true;
+      // console.error('flotcharts error', e);
+      // this.ctrl.error = e.message || 'Render Error';
+      // this.ctrl.renderError = true;
     }
 
     if (incrementRenderCounter) {

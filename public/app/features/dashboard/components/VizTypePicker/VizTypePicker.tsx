@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useCallback, useMemo } from 'react';
 
 import config from 'app/core/config';
@@ -5,6 +6,7 @@ import { VizTypePickerPlugin } from './VizTypePickerPlugin';
 import { EmptySearchResult, stylesFactory, useTheme } from '@grafana/ui';
 import { GrafanaTheme, PanelPluginMeta, PluginState } from '@grafana/data';
 import { css } from 'emotion';
+import _ from 'lodash';
 
 export interface Props {
   current: PanelPluginMeta;
@@ -14,8 +16,9 @@ export interface Props {
 }
 
 export function getAllPanelPluginMeta(): PanelPluginMeta[] {
-  const allPanels = config.panels;
-
+  const Panels = config.panels;
+  console.log(Panels);
+  const allPanels = _.omit(Panels,'timeseries','news','nodeGraph','heatmap');
   return Object.keys(allPanels)
     .filter((key) => allPanels[key]['hideFromList'] === false)
     .map((key) => allPanels[key])

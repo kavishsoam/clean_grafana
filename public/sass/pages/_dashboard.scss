@@ -149,15 +149,15 @@ div.flot-text {
 //   font-size: $font-size-lg;
 // }
 
-.open > .dropdown-menu {
-  display: none !important;
-}
+// .open > .dropdown-menu {
+//   display: none !important;
+// }
 .panel-title {
   background: #b3ccff !important;
 }
-// .horizontal {
-//   height: 30px !important;
-// }
+.horizontal {
+  height: 70px !important;
+}
 
 .panel-height-help {
   display: none;

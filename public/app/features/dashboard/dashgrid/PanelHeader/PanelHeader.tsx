@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { FC } from 'react';
 import { cx } from 'emotion';
 import { DataLink, PanelData } from '@grafana/data';
@@ -12,6 +13,7 @@ import { PanelHeaderNotices } from './PanelHeaderNotices';
 import { PanelHeaderMenuTrigger } from './PanelHeaderMenuTrigger';
 import { PanelHeaderLoadingIndicator } from './PanelHeaderLoadingIndicator';
 import { PanelHeaderMenuWrapper } from './PanelHeaderMenuWrapper';
+import { contextSrv } from 'app/core/core';
 
 export interface Props {
   panel: PanelModel;
@@ -58,8 +60,9 @@ export const PanelHeader: FC<Props> = ({ panel, error, isViewing, isEditing, dat
                   />
                 ) : null}
                 <span className="panel-title-text">{title}</span>
-                {/* <Icon name="angle-down" className="panel-menu-toggle" /> */}
-                <PanelHeaderMenuWrapper panel={panel} dashboard={dashboard} show={panelMenuOpen} onClose={closeMenu} />
+                {contextSrv.user.isGrafanaAdmin ?  <div><Icon name="angle-down" className="panel-menu-toggle" />
+                <PanelHeaderMenuWrapper panel={panel} dashboard={dashboard} show={panelMenuOpen} onClose={closeMenu} /> </div>: null}
+               
                 {data.request && data.request.timeInfo && (
                   <span className="panel-time-info">
                     <Icon name="clock-nine" size="sm" /> {data.request.timeInfo}
