@@ -17,7 +17,8 @@ import { DefaultTimeRange, LoadingState, PanelData, PanelEvents, PanelPlugin } f
 import { updateLocation } from 'app/core/actions';
 import { PANEL_BORDER } from 'app/core/constants';
 import { selectors } from '@grafana/e2e-selectors';
-
+import { contextSrv } from 'app/core/services/context_srv';
+const axios = require('axios');
 interface OwnProps {
   panel: PanelModel;
   dashboard: DashboardModel;
@@ -221,6 +222,38 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
     return !panel.hasTitle();
   }
 
+  handleClick = () => {
+    console.log('panel clicked');
+    if (this.props.dashboard.uid != null && contextSrv.user) {
+      let userData = {
+        // "id": parseInt(this.dashboard.id),
+        user: contextSrv.user.name,
+        panelid: this.props.panel.id.toString(),
+        panelname: this.props.panel.title,
+        dashboardid: this.props.dashboard.uid.toString(),
+        dashboardname: this.props.dashboard.title,
+        clickedon: new Date().toISOString(),
+      };
+      console.log(userData);
+      if (userData) {
+        try {
+          axios.post('http://13.235.73.152:5000/api/savedashboardclick', {
+            // eslint-disable-next-line radix
+            // "id": userData.id,
+            user: userData.user,
+            panelid: userData.panelid,
+            panelname: userData.panelname,
+            dashboardid: userData.dashboardid,
+            dashboardname: userData.dashboardname,
+            clickedon: userData.clickedon,
+          });
+        } catch (e) {
+          throw e;
+        }
+      }
+    }
+  };
+
   render() {
     const { dashboard, panel, isViewing, isEditing, plugin, angularComponent, updateLocation } = this.props;
     const { errorMessage, data, alertState } = this.state;
@@ -258,7 +291,7 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
           alertState={alertState}
         />
         <div className={panelContentClassNames}>
-          <div ref={element => (this.element = element)} className="panel-height-helper" />
+          <div ref={(element) => (this.element = element)} className="panel-height-helper" onClick={this.handleClick} />
         </div>
       </div>
     );

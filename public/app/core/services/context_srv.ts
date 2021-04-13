@@ -17,6 +17,7 @@ export class User {
   lightTheme: boolean;
   hasEditPermissionInFolders: boolean;
   email?: string;
+  name?: string;
 
   constructor() {
     if (config.bootData.user) {

@@ -28,6 +28,8 @@ import {
 } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 import { loadSnapshotData } from '../utils/loadSnapshotData';
+import { contextSrv } from 'app/core/services/context_srv';
+const axios = require('axios');
 
 const DEFAULT_PLUGIN_ERROR = 'Error in plugin';
 
@@ -97,7 +99,7 @@ export class PanelChrome extends PureComponent<Props, State> {
       .getQueryRunner()
       .getData({ withTransforms: true, withFieldConfig: true })
       .subscribe({
-        next: data => this.onDataUpdate(data),
+        next: (data) => this.onDataUpdate(data),
       });
   }
 
@@ -156,7 +158,7 @@ export class PanelChrome extends PureComponent<Props, State> {
       case LoadingState.Done:
         // If we are doing a snapshot save data in panel model
         if (this.props.dashboard.snapshot) {
-          this.props.panel.snapshotData = data.series.map(frame => toDataFrameDTO(frame));
+          this.props.panel.snapshotData = data.series.map((frame) => toDataFrameDTO(frame));
         }
         if (isFirstLoad) {
           isFirstLoad = false;
@@ -237,6 +239,38 @@ export class PanelChrome extends PureComponent<Props, State> {
     });
   };
 
+  handleClick = () => {
+    console.log('panel clicked');
+    if (this.props.dashboard.uid != null && contextSrv.user) {
+      let userData = {
+        // "id": parseInt(this.dashboard.id),
+        user: contextSrv.user.name,
+        panelid: this.props.panel.id.toString(),
+        panelname: this.props.panel.title,
+        dashboardid: this.props.dashboard.uid.toString(),
+        dashboardname: this.props.dashboard.title,
+        clickedon: new Date().toISOString(),
+      };
+      console.log(userData);
+      if (userData) {
+        try {
+          axios.post('http://13.235.73.152:5000/api/savedashboardclick', {
+            // eslint-disable-next-line radix
+            // "id": userData.id,
+            user: userData.user,
+            panelid: userData.panelid,
+            panelname: userData.panelname,
+            dashboardid: userData.dashboardid,
+            dashboardname: userData.dashboardname,
+            clickedon: userData.clickedon,
+          });
+        } catch (e) {
+          throw e;
+        }
+      }
+    }
+  };
+
   shouldSignalRenderingCompleted(loadingState: LoadingState, pluginMeta: PanelPluginMeta) {
     return loadingState === LoadingState.Done || pluginMeta.skipDataQuery;
   }
@@ -272,7 +306,7 @@ export class PanelChrome extends PureComponent<Props, State> {
 
     return (
       <>
-        <div className={panelContentClassNames}>
+        <div className={panelContentClassNames} onClick={this.handleClick}>
           <PanelComponent
             id={panel.id}
             data={data}

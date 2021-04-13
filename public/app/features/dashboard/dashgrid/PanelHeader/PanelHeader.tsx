@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import { DataLink, LoadingState, PanelData, PanelMenuItem, QueryResultMetaNotice, ScopedVars } from '@grafana/data';
@@ -14,6 +15,7 @@ import { getPanelLinksSupplier } from 'app/features/panel/panellinks/linkSupplie
 import { getPanelMenu } from 'app/features/dashboard/utils/getPanelMenu';
 import { updateLocation } from 'app/core/actions';
 import { css } from 'emotion';
+import { contextSrv } from 'app/core/core';
 
 export interface Props {
   panel: PanelModel;
@@ -197,12 +199,15 @@ export class PanelHeader extends PureComponent<Props, State> {
                 />
               )}
               <span className="panel-title-text">{title}</span>
-              <Icon name="angle-down" className="panel-menu-toggle" />
+              {contextSrv.user.isGrafanaAdmin ? <div>
+                <Icon name="angle-down" className="panel-menu-toggle" />
               {this.state.panelMenuOpen && (
                 <ClickOutsideWrapper onClick={this.closeMenu} parent={document}>
                   <PanelHeaderMenu items={menuItems} />
                 </ClickOutsideWrapper>
               )}
+              </div>: null}
+            
               {data.request && data.request.timeInfo && (
                 <span className="panel-time-info">
                   <Icon name="clock-nine" size="sm" /> {data.request.timeInfo}

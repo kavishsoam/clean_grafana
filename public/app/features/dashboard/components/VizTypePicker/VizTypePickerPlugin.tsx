@@ -36,9 +36,7 @@ const VizTypePickerPlugin: React.FC<Props> = ({ isCurrent, plugin, onClick, disa
           <img className={styles.img} src={plugin.info.logos.small} />
         </div>
       </div>
-      <div className={cx(styles.badge, disabled && styles.disabled)}>
-        <PanelPluginBadge plugin={plugin} />
-      </div>
+      <div className={cx(styles.badge, disabled && styles.disabled)}>{/* <PanelPluginBadge plugin={plugin} /> */}</div>
     </div>
   );
 };

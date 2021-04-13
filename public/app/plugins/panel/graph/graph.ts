@@ -45,8 +45,9 @@ import {
 } from '@grafana/data';
 import { GraphContextMenuCtrl } from './GraphContextMenuCtrl';
 import { TimeSrv } from 'app/features/dashboard/services/TimeSrv';
-import { ContextSrv } from 'app/core/services/context_srv';
+import { ContextSrv, contextSrv } from 'app/core/services/context_srv';
 import { getFieldLinksSupplier } from 'app/features/panel/panellinks/linkSuppliers';
+const axios = require('axios');
 
 const LegendWithThemeProvider = provideTheme(Legend);
 
@@ -218,7 +219,7 @@ class GraphElement {
 
       const dataLinks = [
         {
-          items: linksSupplier.getLinks(this.panel.scopedVars).map<ContextMenuItem>(link => {
+          items: linksSupplier.getLinks(this.panel.scopedVars).map<ContextMenuItem>((link) => {
             return {
               label: link.title,
               url: link.href,
@@ -296,6 +297,34 @@ class GraphElement {
             })
           : undefined;
       }
+      if (this.dashboard.uid != null && contextSrv.user) {
+        let userData = {
+          // "id": parseInt(this.dashboard.id),
+          user: contextSrv.user.name,
+          panelid: this.panel.id.toString(),
+          panelname: this.panel.title,
+          dashboardid: this.dashboard.uid.toString(),
+          dashboardname: this.dashboard.title,
+          clickedon: new Date().toISOString(),
+        };
+        console.log(userData);
+        if (userData) {
+          try {
+            axios.post('http://13.235.73.152:5000/api/savedashboardclick', {
+              // eslint-disable-next-line radix
+              // "id": userData.id,
+              user: userData.user,
+              panelid: userData.panelid,
+              panelname: userData.panelname,
+              dashboardid: userData.dashboardid,
+              dashboardname: userData.dashboardname,
+              clickedon: userData.clickedon,
+            });
+          } catch (e) {
+            throw e;
+          }
+        }
+      }
 
       this.scope.$apply(() => {
         // Setting nearest CustomScrollbar element as a scroll context for graph context menu
@@ -333,7 +362,7 @@ class GraphElement {
       return dataIndex;
     }
 
-    const correctIndex = timeField.values.toArray().findIndex(value => value === ts);
+    const correctIndex = timeField.values.toArray().findIndex((value) => value === ts);
     return correctIndex > -1 ? correctIndex : dataIndex;
   }
 
@@ -497,8 +526,8 @@ class GraphElement {
         let bucketSize: number;
 
         if (this.data.length) {
-          let histMin = _.min(_.map(this.data, s => s.stats.min));
-          let histMax = _.max(_.map(this.data, s => s.stats.max));
+          let histMin = _.min(_.map(this.data, (s) => s.stats.min));
+          let histMax = _.max(_.map(this.data, (s) => s.stats.max));
           const ticks = panel.xaxis.buckets || this.panelWidth / 50;
           if (panel.xaxis.min != null) {
             const isInvalidXaxisMin = tickStep(panel.xaxis.min, histMax, ticks) <= 0;
@@ -627,9 +656,9 @@ class GraphElement {
     const sortDesc = panel.legend.sortDesc === true ? -1 : 1;
 
     if (shouldSortBy) {
-      return _.sortBy(series, s => s.stats[sortBy] * sortDesc);
+      return _.sortBy(series, (s) => s.stats[sortBy] * sortDesc);
     } else {
-      return _.sortBy(series, s => s.zindex);
+      return _.sortBy(series, (s) => s.zindex);
     }
   }
 
@@ -701,7 +730,7 @@ class GraphElement {
         }
       }
 
-      ticks = Object.keys(tickValues).map(v => Number(v));
+      ticks = Object.keys(tickValues).map((v) => Number(v));
       min = _.min(ticks)!;
       max = _.max(ticks)!;
 
