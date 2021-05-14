@@ -3,6 +3,7 @@
   "name": "Pie chart v2",
   "id": "piechart",
   "state": "alpha",
+  "annotations": true,
 
   "info": {
     "author": {

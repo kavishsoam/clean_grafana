@@ -2,7 +2,7 @@ import { PanelPlugin } from '@grafana/data';
 import { GraphPanel } from './GraphPanel';
 import { Options } from './types';
 
-export const plugin = new PanelPlugin<Options>(GraphPanel).useFieldConfig().setPanelOptions(builder => {
+export const plugin = new PanelPlugin<Options>(GraphPanel).useFieldConfig().setPanelOptions((builder) => {
   builder
     .addBooleanSwitch({
       path: 'graph.showBars',

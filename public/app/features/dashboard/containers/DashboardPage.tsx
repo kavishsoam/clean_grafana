@@ -119,7 +119,7 @@ export class DashboardPage extends PureComponent<Props, State> {
     if (!editPanel && urlEditPanelId) {
       dashboardWatcher.setEditingState(true);
 
-      this.getPanelByIdFromUrlParam(urlEditPanelId, panel => {
+      this.getPanelByIdFromUrlParam(urlEditPanelId, (panel) => {
         // if no edit permission show error
         if (!dashboard.canEditPanel(panel)) {
           this.props.notifyApp(createErrorNotification('Permission to edit panel denied'));
@@ -139,7 +139,7 @@ export class DashboardPage extends PureComponent<Props, State> {
 
     // entering view mode
     if (!viewPanel && urlViewPanelId) {
-      this.getPanelByIdFromUrlParam(urlViewPanelId, panel => {
+      this.getPanelByIdFromUrlParam(urlViewPanelId, (panel) => {
         this.setPanelFullscreenClass(true);
         dashboard.initViewPanel(panel);
         this.setState({
@@ -211,15 +211,49 @@ export class DashboardPage extends PureComponent<Props, State> {
     }
 
     // Return if the "Add panel" exists already
-    if (dashboard.panels.length > 0 && dashboard.panels[0].type === 'add-panel') {
-      return;
-    }
+    // if (dashboard.panels.length > 0 && dashboard.panels[0].type === 'add-panel') {
+    //   console.log('sa');
+    //   return;
+    // }
 
-    dashboard.addPanel({
-      type: 'add-panel',
-      gridPos: { x: 0, y: 0, w: 12, h: 8 },
-      title: 'Panel Title',
-    });
+    // dashboard.addPanel({
+    //   type: 'add-panel',
+    //   gridPos: { x: 0, y: 0, w: 8, h: 6 },
+    //   title: 'Panel Title',
+    // });
+    if (dashboard.panels.length > 0) {
+      // for (let i = 0; i < dashboard.panels.length; i++) {
+      if (dashboard.panels.length > 0 && dashboard.panels[0].type !== 'add-panel') {
+        for (let i = dashboard.panels.length - 1; i >= 0; i--) {
+          console.log(dashboard.panels[i].type);
+          if (dashboard.panels[i].type !== 'add-panel' && dashboard.panels.length < 3) {
+            dashboard.addPanel({
+              type: 'add-panel',
+              gridPos: { x: i * 8 + 8, y: 0, w: 8, h: 6 },
+              title: 'Panel Title',
+            });
+          } else if (dashboard.panels[i].type !== 'add-panel') {
+            dashboard.addPanel({
+              type: 'add-panel',
+              gridPos: { x: i * 8 - 16, y: i * 6 + 6, w: 8, h: 6 },
+              title: 'Panel Title',
+            });
+          }
+          break;
+        }
+        // dashboard.addPanel({
+        //   type: 'add-panel',
+        //   gridPos: { x: 8, y: 0, w: 8, h: 6 },
+        //   title: 'Panel Title',
+        // });
+      }
+    } else if (dashboard.panels.length === 0) {
+      dashboard.addPanel({
+        type: 'add-panel',
+        gridPos: { x: 0, y: 0, w: 8, h: 6 },
+        title: 'Panel Title',
+      });
+    }
 
     // scroll to top after adding panel
     this.setState({ updateScrollTop: 0 });

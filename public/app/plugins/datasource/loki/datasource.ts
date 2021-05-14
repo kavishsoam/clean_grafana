@@ -96,8 +96,8 @@ export class LokiDatasource extends DataSourceApi<LokiQuery, LokiOptions> {
   query(options: DataQueryRequest<LokiQuery>): Observable<DataQueryResponse> {
     const subQueries: Array<Observable<DataQueryResponse>> = [];
     const filteredTargets = options.targets
-      .filter(target => target.expr && !target.hide)
-      .map(target => ({
+      .filter((target) => target.expr && !target.hide)
+      .map((target) => ({
         ...target,
         expr: this.templateSrv.replace(target.expr, options.scopedVars, this.interpolateQueryExpr),
       }));
@@ -258,7 +258,7 @@ export class LokiDatasource extends DataSourceApi<LokiQuery, LokiOptions> {
     const liveTarget = this.createLiveTarget(target, maxDataPoints);
 
     return this.streams.getStream(liveTarget).pipe(
-      map(data => ({
+      map((data) => ({
         data: data || [],
         key: `loki-${liveTarget.refId}`,
         state: LoadingState.Streaming,
@@ -269,7 +269,7 @@ export class LokiDatasource extends DataSourceApi<LokiQuery, LokiOptions> {
   interpolateVariablesInQueries(queries: LokiQuery[], scopedVars: ScopedVars): LokiQuery[] {
     let expandedQueries = queries;
     if (queries && queries.length) {
-      expandedQueries = queries.map(query => ({
+      expandedQueries = queries.map((query) => ({
         ...query,
         datasource: this.name,
         expr: this.templateSrv.replace(query.expr, scopedVars, this.interpolateQueryExpr),
@@ -399,7 +399,7 @@ export class LokiDatasource extends DataSourceApi<LokiQuery, LokiOptions> {
         }),
         switchMap((res: { data: LokiStreamResponse; status: number }) =>
           of({
-            data: res.data ? res.data.data.result.map(stream => lokiStreamResultToDataFrame(stream, reverse)) : [],
+            data: res.data ? res.data.data.result.map((stream) => lokiStreamResultToDataFrame(stream, reverse)) : [],
           })
         )
       )
@@ -408,7 +408,7 @@ export class LokiDatasource extends DataSourceApi<LokiQuery, LokiOptions> {
 
   prepareLogRowContextQueryTarget = (row: LogRowModel, limit: number, direction: 'BACKWARD' | 'FORWARD') => {
     const query = Object.keys(row.labels)
-      .map(label => `${label}="${row.labels[label].replace(/\\/g, '\\\\')}"`) // escape backslashes in label as users can't escape them by themselves
+      .map((label) => `${label}="${row.labels[label].replace(/\\/g, '\\\\')}"`) // escape backslashes in label as users can't escape them by themselves
       .join(',');
 
     const contextTimeBuffer = 2 * 60 * 60 * 1000; // 2h buffer
@@ -450,7 +450,7 @@ export class LokiDatasource extends DataSourceApi<LokiQuery, LokiOptions> {
     const start = `${startMs}000000`; // API expects nanoseconds
     return this._request(`${LOKI_ENDPOINT}/label`, { start })
       .pipe(
-        map(res => {
+        map((res) => {
           const values: any[] = res?.data?.data || res?.data?.values || [];
           const testResult =
             values.length > 0
@@ -504,7 +504,7 @@ export class LokiDatasource extends DataSourceApi<LokiQuery, LokiOptions> {
       }
       const view = new DataFrameView<{ ts: string; line: string }>(frame);
 
-      view.forEach(row => {
+      view.forEach((row) => {
         annotations.push({
           time: new Date(row.ts).valueOf(),
           text: row.line,
@@ -567,7 +567,7 @@ export function lokiSpecialRegexEscape(value: any) {
  */
 function isMetricsQuery(query: string): boolean {
   const tokens = Prism.tokenize(query, syntax);
-  return tokens.some(t => {
+  return tokens.some((t) => {
     // Not sure in which cases it can be string maybe if nothing matched which means it should not be a function
     return typeof t !== 'string' && t.type === 'function';
   });

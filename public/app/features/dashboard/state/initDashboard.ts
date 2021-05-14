@@ -256,7 +256,7 @@ function getNewDashboardModelData(urlFolderId?: string): any {
       panels: [
         {
           type: 'add-panel',
-          gridPos: { x: 0, y: 0, w: 12, h: 9 },
+          gridPos: { x: 0, y: 0, w: 8, h: 6 },
           title: 'Panel Title',
         },
       ],
@@ -276,7 +276,7 @@ function updateQueriesWhenComingFromExplore(
   originPanelId: number,
   queries: DataQuery[]
 ) {
-  const panelArrId = dashboard.panels.findIndex(panel => panel.id === originPanelId);
+  const panelArrId = dashboard.panels.findIndex((panel) => panel.id === originPanelId);
 
   if (panelArrId > -1) {
     dashboard.panels[panelArrId].targets = queries;

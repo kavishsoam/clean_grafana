@@ -179,7 +179,7 @@ const ContextMenuItemComponent: React.FC<ContextMenuItemProps> = React.memo(
           href={url ? url : undefined}
           target={target}
           className={cx(className, styles.link)}
-          onClick={e => {
+          onClick={(e) => {
             if (onClick) {
               onClick(e);
             }
@@ -211,7 +211,7 @@ const ContextMenuGroupComponent: React.FC<ContextMenuGroupProps> = ({ group, onC
       {group.label && <div className={styles.groupLabel}>{group.label}</div>}
       <List
         items={group.items || []}
-        renderItem={item => {
+        renderItem={(item) => {
           return (
             <ContextMenuItemComponent
               url={item.url}

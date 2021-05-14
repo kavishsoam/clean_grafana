@@ -223,7 +223,6 @@ export class PanelChromeAngularUnconnected extends PureComponent<Props, State> {
   }
 
   handleClick = () => {
-    console.log('panel clicked');
     if (this.props.dashboard.uid != null && contextSrv.user) {
       let userData = {
         // "id": parseInt(this.dashboard.id),

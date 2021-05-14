@@ -24,7 +24,7 @@ export const plugin = new PanelPlugin<Options, GraphFieldConfig>(GraphPanel)
         },
       },
     },
-    useCustomConfig: builder => {
+    useCustomConfig: (builder) => {
       builder
         .addRadio({
           path: 'drawStyle',
@@ -41,7 +41,7 @@ export const plugin = new PanelPlugin<Options, GraphFieldConfig>(GraphPanel)
           settings: {
             options: graphFieldOptions.lineInterpolation,
           },
-          showIf: c => c.drawStyle === DrawStyle.Line,
+          showIf: (c) => c.drawStyle === DrawStyle.Line,
         })
         .addSliderInput({
           path: 'lineWidth',
@@ -52,7 +52,7 @@ export const plugin = new PanelPlugin<Options, GraphFieldConfig>(GraphPanel)
             max: 10,
             step: 1,
           },
-          showIf: c => c.drawStyle !== DrawStyle.Points,
+          showIf: (c) => c.drawStyle !== DrawStyle.Points,
         })
         .addSliderInput({
           path: 'fillOpacity',
@@ -63,7 +63,7 @@ export const plugin = new PanelPlugin<Options, GraphFieldConfig>(GraphPanel)
             max: 1,
             step: 0.1,
           },
-          showIf: c => c.drawStyle !== DrawStyle.Points,
+          showIf: (c) => c.drawStyle !== DrawStyle.Points,
         })
         .addRadio({
           path: 'spanNulls',
@@ -75,7 +75,7 @@ export const plugin = new PanelPlugin<Options, GraphFieldConfig>(GraphPanel)
               { label: 'Connected', value: true },
             ],
           },
-          showIf: c => c.drawStyle === DrawStyle.Line,
+          showIf: (c) => c.drawStyle === DrawStyle.Line,
         })
         .addRadio({
           path: 'showPoints',
@@ -94,7 +94,7 @@ export const plugin = new PanelPlugin<Options, GraphFieldConfig>(GraphPanel)
             max: 10,
             step: 1,
           },
-          showIf: c => c.showPoints !== PointVisibility.Never,
+          showIf: (c) => c.showPoints !== PointVisibility.Never,
         })
         .addRadio({
           path: 'axisPlacement',
@@ -113,7 +113,7 @@ export const plugin = new PanelPlugin<Options, GraphFieldConfig>(GraphPanel)
           settings: {
             placeholder: 'Optional text',
           },
-          showIf: c => c.axisPlacement !== AxisPlacement.Hidden,
+          showIf: (c) => c.axisPlacement !== AxisPlacement.Hidden,
           // no matter what the field type is
           shouldApply: () => true,
         })
@@ -124,11 +124,11 @@ export const plugin = new PanelPlugin<Options, GraphFieldConfig>(GraphPanel)
           settings: {
             placeholder: 'Auto',
           },
-          showIf: c => c.axisPlacement !== AxisPlacement.Hidden,
+          showIf: (c) => c.axisPlacement !== AxisPlacement.Hidden,
         });
     },
   })
-  .setPanelOptions(builder => {
+  .setPanelOptions((builder) => {
     builder
       .addRadio({
         path: 'tooltipOptions.mode',
@@ -167,6 +167,6 @@ export const plugin = new PanelPlugin<Options, GraphFieldConfig>(GraphPanel)
             { value: 'right', label: 'Right' },
           ],
         },
-        showIf: c => c.legend.displayMode !== LegendDisplayMode.Hidden,
+        showIf: (c) => c.legend.displayMode !== LegendDisplayMode.Hidden,
       });
   });
