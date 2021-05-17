@@ -10,6 +10,7 @@ type PostAnnotationsCmd struct {
 	Text        string           `json:"text"`
 	Tags        []string         `json:"tags"`
 	Data        *simplejson.Json `json:"data"`
+	Reply       string           `json:"text"`
 }
 
 type UpdateAnnotationsCmd struct {
@@ -18,6 +19,7 @@ type UpdateAnnotationsCmd struct {
 	TimeEnd int64    `json:"timeEnd,omitempty"` // Optional
 	Text    string   `json:"text"`
 	Tags    []string `json:"tags"`
+	Reply   string   `json:"text"`
 }
 
 type PatchAnnotationsCmd struct {
@@ -26,6 +28,7 @@ type PatchAnnotationsCmd struct {
 	TimeEnd int64    `json:"timeEnd,omitempty"` // Optional
 	Text    string   `json:"text"`
 	Tags    []string `json:"tags"`
+	Reply   string   `json:"text"`
 }
 
 type DeleteAnnotationsCmd struct {
