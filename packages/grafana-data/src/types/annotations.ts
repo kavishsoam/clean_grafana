@@ -38,7 +38,6 @@ export interface AnnotationEvent {
   type?: string;
   tags?: string[];
   color?: string;
-  reply?: string;
 
   // Currently used to merge annotations from alerts and dashboard
   source?: any; // source.type === 'dashboard'
