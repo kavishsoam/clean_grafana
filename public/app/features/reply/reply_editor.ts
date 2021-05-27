@@ -2,22 +2,20 @@ import _ from 'lodash';
 import { coreModule } from 'app/core/core';
 import { MetricsPanelCtrl } from 'app/plugins/sdk';
 import { AnnotationEvent } from '@grafana/data';
+import { ReplyService } from './reply_service';
 import { dateTime } from '@grafana/data';
-import { AnnotationsSrv } from './all';
-// import { GraphContextMenuCtrl } from ';
+// import { AnnotationsSrv } from './all';
 
-export class EventEditorCtrl {
+export class ReplyEditorCtrl {
   panelCtrl: MetricsPanelCtrl;
   event: AnnotationEvent;
   timeRange: { from: number; to: number };
   form: any;
   close: any;
   timeFormated: string;
-  legendElem: HTMLElement;
+
   /** @ngInject */
-  constructor(
-    private annotationsSrv: AnnotationsSrv // contextMenu: GraphContextMenuCtrl
-  ) {}
+  constructor(private replySrv: ReplyService) {}
 
   $onInit() {
     this.event.panelId = this.panelCtrl.panel.id;
@@ -51,7 +49,7 @@ export class EventEditorCtrl {
     }
 
     if (saveModel.id) {
-      this.annotationsSrv
+      this.replySrv
         .updateAnnotationEvent(saveModel)
         .then(() => {
           this.panelCtrl.refresh();
@@ -62,7 +60,7 @@ export class EventEditorCtrl {
           this.close();
         });
     } else {
-      this.annotationsSrv
+      this.replySrv
         .saveAnnotationEvent(saveModel)
         .then(() => {
           this.panelCtrl.refresh();
@@ -75,54 +73,8 @@ export class EventEditorCtrl {
     }
   }
 
-  reply(item: any) {
-    // const scrollContextElement = this.elem.closest('.view') ? this.elem.closest('.view').get()[0] : null;
-    // const contextMenuSourceItem = item;
-    // this.contextMenu.setSource(contextMenuSourceItem);
-  }
-
-  // getContextMenuItemsSupplier = (
-  //   flotPosition: { x: number; y: number },
-  //   // linksSupplier?: LinkModelSupplier<FieldDisplay>
-  // ): (() => ContextMenuGroup[]) => {
-  //   return () => {
-  //     // Fixed context menu items
-  //     const items: ContextMenuGroup[] = [
-  //       {
-  //         items: [
-  //           {
-  //             label: 'Add annotation1',
-  //             icon: 'comment-alt',
-  //             onClick: () => this.eventManager.updateTime({ from: flotPosition.x, to: null }),
-  //           },
-  //         ],
-  //       },
-  //     ];
-
-  //     if (!linksSupplier) {
-  //       return items;
-  //     }
-
-  //     const dataLinks = [
-  //       {
-  //         // items: linksSupplier.getLinks(this.panel.scopedVars).map<ContextMenuItem>((link) => {
-  //         //   return {
-  //         //     label: link.title,
-  //         //     url: link.href,
-  //         //     target: link.target,
-  //         //     icon: `${link.target === '_self' ? 'link' : 'external-link-alt'}`,
-  //         //     onClick: link.onClick,
-  //         //   };
-  //         // }),
-  //       },
-  //     ];
-
-  //     return [...items, ...dataLinks];
-  //   };
-  // };
-
   delete() {
-    return this.annotationsSrv
+    return this.replySrv
       .deleteAnnotationEvent(this.event)
       .then(() => {
         this.panelCtrl.refresh();
@@ -144,13 +96,13 @@ function tryEpochToMoment(timestamp: any) {
   }
 }
 
-export function eventEditor() {
+export function replyEditor() {
   return {
     restrict: 'E',
-    controller: EventEditorCtrl,
+    controller: ReplyEditorCtrl,
     bindToController: true,
     controllerAs: 'ctrl',
-    templateUrl: 'public/app/features/annotations/partials/event_editor.html',
+    templateUrl: 'public/app/features/reply/partials/reply_editor.html',
     scope: {
       panelCtrl: '=',
       event: '=',
@@ -159,4 +111,4 @@ export function eventEditor() {
   };
 }
 
-coreModule.directive('eventEditor', eventEditor);
+coreModule.directive('replyEditor', replyEditor);
